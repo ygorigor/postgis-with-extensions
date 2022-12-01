@@ -1,11 +1,11 @@
-#### PostgreSQL image based on [postgis/postgis](https://hub.docker.com/r/postgis/postgis), with quite a few added extensions.
+#### PostgreSQL image based on [postgis/postgis](https://hub.docker.com/r/postgis/postgis), with quite a few added extensions
 [![ygorigor/postgis-with-extensions][docker-pulls-image]][docker-hub-url]
 [![ygorigor/postgis-with-extensions][github-last-commit-image]][github-url]
 [![ygorigor/postgis-with-extensions][github-workflow-status-image]][github-url]
 
 Tag labels follow the pattern `X-Y.Z`, where `X` is the *major* Postgres version (starting from version 11) and `Y.Z` is the *major.minor* Postgis version.
 
-The `latest` tag currently corresponds to `14-3.3`.
+The `latest` tag currently corresponds to `15-3.3`.
 
 ## Usage
 
@@ -20,6 +20,7 @@ docker run -e POSTGRES_PASSWORD=mysecretpassword -d ygorigor/postgis-with-extens
 For more detailed instructions about how to start and control your Postgres container, see the documentation for the `postgres` image [here](https://registry.hub.docker.com/_/postgres/).
 
 ## Available extensions
+
 - [postgis](https://github.com/postgis/postgis)
 - [asn1oid](https://github.com/df7cb/pgsql-asn1oid)
 - [extra_window_functions](https://github.com/xocolatl/extra_window_functions)
@@ -58,7 +59,6 @@ For more detailed instructions about how to start and control your Postgres cont
 - [pg_track_settings](https://github.com/rjuju/pg_track_settings)
 - [pg_wait_sampling](https://github.com/postgrespro/pg_wait_sampling)
 - [pldebugger (pldbgapi)](https://github.com/EnterpriseDB/pldebugger)
-- [pllua](https://github.com/pllua/pllua)
 - [plpgsql_check](https://github.com/okbob/plpgsql_check)
 - [plproxy](https://github.com/plproxy/plproxy)
 - [plpython3](https://www.postgresql.org/docs/current/plpython.html)
