@@ -15,10 +15,6 @@ RUN apt-get update && \
 		ca-certificates \
 		curl
 
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
-    curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
-    apt-get update && \
-    ACCEPT_EULA=Y apt-get install -y msodbcsql17 mssql-tools unixodbc-dev
 
 FROM basic-deps as powa-scripts
 
@@ -41,6 +37,14 @@ RUN apt-get install -y --no-install-recommends \
 	postgresql-server-dev-$PG_MAJOR
 
 
+
+
+FROM basic-deps as mssqlodbc-deps
+
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
+    curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
+    apt-get update && \
+    ACCEPT_EULA=Y apt-get install -y msodbcsql17 mssql-tools unixodbc-dev
 
 
 FROM common-deps as build-sqlite_fdw
@@ -180,6 +184,16 @@ COPY --from=build-sqlite_fdw \
 COPY --from=build-sqlite_fdw \
 	/usr/lib/postgresql/$PG_MAJOR/lib/sqlite_fdw.so \
 	/usr/lib/postgresql/$PG_MAJOR/lib/sqlite_fdw.so
+
+COPY --from=mssqlodbc-deps \
+	/opt/microsoft \
+	/opt/microsoft/
+COPY --from=mssqlodbc-deps \
+	/opt/mssql-tools \
+	/opt/mssql-tools/
+COPY --from=mssqlodbc-deps \
+	/usr/share/doc/msodbcsql17 \
+	/usr/share/doc/msodbcsql17/
 
 COPY --from=build-oracle_fdw \
 	/usr/share/postgresql/$PG_MAJOR/extension/oracle_fdw* \
