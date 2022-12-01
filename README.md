@@ -1,7 +1,7 @@
 #### PostgreSQL image based on [postgis/postgis](https://hub.docker.com/r/postgis/postgis), with quite a few added extensions.
-[![ivanlonel/postgis-with-extensions][docker-pulls-image]][docker-hub-url]
-[![ivanlonel/postgis-with-extensions][github-last-commit-image]][github-url]
-[![ivanlonel/postgis-with-extensions][github-workflow-status-image]][github-url]
+[![ygorigor/postgis-with-extensions][docker-pulls-image]][docker-hub-url]
+[![ygorigor/postgis-with-extensions][github-last-commit-image]][github-url]
+[![ygorigor/postgis-with-extensions][github-workflow-status-image]][github-url]
 
 Tag labels follow the pattern `X-Y.Z`, where `X` is the *major* Postgres version (starting from version 12) and `Y.Z` is the *major.minor* Postgis version.
 
@@ -12,10 +12,10 @@ The `latest` tag currently corresponds to `14-3.3`.
 In order to run a basic container capable of serving a Postgres database with all extensions below available:
 
 ```bash
-docker run -e POSTGRES_PASSWORD=mysecretpassword -d ivanlonel/postgis-with-extensions
+docker run -e POSTGRES_PASSWORD=mysecretpassword -d ygorigor/postgis-with-extensions
 ```
 
-[Here](https://github.com/ivanlonel/postgis-with-extensions/tree/master/compose_example) is a sample docker-compose stack definition, which includes a [powa-web](https://hub.docker.com/r/powateam/powa-web) container and a [pgadmin](https://hub.docker.com/r/dpage/pgadmin4) container. The Postgres container is built from a Dockerfile that extends this image by running `localedef` in order to ensure Postgres will use the locale specified in docker-compose.yml.
+[Here](https://github.com/ygorigor/postgis-with-extensions/tree/master/compose_example) is a sample docker-compose stack definition, which includes a [powa-web](https://hub.docker.com/r/powateam/powa-web) container and a [pgadmin](https://hub.docker.com/r/dpage/pgadmin4) container. The Postgres container is built from a Dockerfile that extends this image by running `localedef` in order to ensure Postgres will use the locale specified in docker-compose.yml.
 
 For more detailed instructions about how to start and control your Postgres container, see the documentation for the `postgres` image [here](https://registry.hub.docker.com/_/postgres/).
 
@@ -78,8 +78,8 @@ For more detailed instructions about how to start and control your Postgres cont
 - [toastinfo](https://github.com/credativ/toastinfo)
 - [unit](https://github.com/df7cb/postgresql-unit)
 
-[docker-hub-url]: https://hub.docker.com/r/ivanlonel/postgis-with-extensions/
-[github-url]: https://github.com/ivanlonel/postgis-with-extensions/
-[docker-pulls-image]: https://img.shields.io/docker/pulls/ivanlonel/postgis-with-extensions.svg?style=flat
-[github-last-commit-image]: https://img.shields.io/github/last-commit/ivanlonel/postgis-with-extensions.svg?style=flat
-[github-workflow-status-image]: https://img.shields.io/github/workflow/status/ivanlonel/postgis-with-extensions/Create%20and%20publish%20a%20Docker%20image
+[docker-hub-url]: https://hub.docker.com/r/ygorigor/postgis-with-extensions/
+[github-url]: https://github.com/ygorigor/postgis-with-extensions/
+[docker-pulls-image]: https://img.shields.io/docker/pulls/ygorigor/postgis-with-extensions.svg?style=flat
+[github-last-commit-image]: https://img.shields.io/github/last-commit/ygorigor/postgis-with-extensions.svg?style=flat
+[github-workflow-status-image]: https://img.shields.io/github/workflow/status/ygorigor/postgis-with-extensions/Create%20and%20publish%20a%20Docker%20image
