@@ -105,6 +105,7 @@ FROM base-image as final-stage
 RUN apt-get update && \
 	apt-get install -y --no-install-recommends \
 		libaio1 \
+		pgagent \
 		libsqlite3-mod-spatialite \
 		postgresql-$PG_MAJOR-asn1oid \
 		postgresql-$PG_MAJOR-cron \
