@@ -3,7 +3,7 @@
 [![ygorigor/postgis-with-extensions][github-last-commit-image]][github-url]
 [![ygorigor/postgis-with-extensions][github-workflow-status-image]][github-url]
 
-Tag labels follow the pattern `X-Y.Z`, where `X` is the *major* Postgres version (starting from version 12) and `Y.Z` is the *major.minor* Postgis version.
+Tag labels follow the pattern `X-Y.Z`, where `X` is the *major* Postgres version (starting from version 11) and `Y.Z` is the *major.minor* Postgis version.
 
 The `latest` tag currently corresponds to `14-3.3`.
 
@@ -74,7 +74,6 @@ For more detailed instructions about how to start and control your Postgres cont
 - [table_log](https://github.com/credativ/table_log)
 - [tdigest](https://github.com/tvondra/tdigest)
 - [tds_fdw](https://github.com/tds-fdw/tds_fdw)
-- [timescaledb](https://github.com/timescale/timescaledb)
 - [toastinfo](https://github.com/credativ/toastinfo)
 - [unit](https://github.com/df7cb/postgresql-unit)
 
