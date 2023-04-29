@@ -47,6 +47,20 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
     ACCEPT_EULA=Y apt-get install -y msodbcsql17 msodbcsql18 mssql-tools mssql-tools18 unixodbc-dev
 
 
+FROM common-deps as build-pgvector
+
+WORKDIR /tmp
+ARG REPO=https://github.com/pgvector/pgvector.git
+RUN apt-get install -y --no-install-recommends git && \
+	git clone $REPO --single-branch --branch $(git ls-remote --tags --refs $REPO | tail -n1 | cut -d/ -f3)
+WORKDIR /tmp/pgvector
+RUN make clean && \
+		make OPTFLAGS="" && \
+		make install
+
+
+
+
 FROM common-deps as build-sqlite_fdw
 
 WORKDIR /tmp/sqlite_fdw
@@ -170,6 +184,13 @@ COPY --from=powa-scripts \
 COPY --from=powa-scripts \
 	/tmp/powa/install_all_powa_ext.sql \
 	/usr/local/src/install_all_powa_ext.sql
+
+COPY --from=build-pgvector \
+	/usr/share/postgresql/$PG_MAJOR/extension/vector* \
+	/usr/share/postgresql/$PG_MAJOR/extension/
+COPY --from=build-pgvector \
+	/usr/lib/postgresql/$PG_MAJOR/lib/vector* \
+	/usr/lib/postgresql/$PG_MAJOR/lib/
 
 COPY --from=build-sqlite_fdw \
 	/usr/share/postgresql/$PG_MAJOR/extension/sqlite_fdw* \
