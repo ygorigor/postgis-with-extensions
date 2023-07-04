@@ -111,6 +111,7 @@ FROM base-image as final-stage
 RUN apt-get update && \
 	apt-get install -y --no-install-recommends \
 		libaio1 \
+		locales-all \
 		libsqlite3-mod-spatialite \
 		pgagent \
 		postgresql-$PG_MAJOR-asn1oid \
