@@ -1,13 +1,13 @@
-ARG BASE_IMAGE_TAG=15-3.4
+ARG BASE_IMAGE_TAG=16-3.4
 
-FROM postgis/postgis:$BASE_IMAGE_TAG as base-image
+FROM postgis/postgis:$BASE_IMAGE_TAG AS base-image
 
 ENV ORACLE_HOME=/usr/lib/oracle/client
 ENV PATH=$PATH:${ORACLE_HOME}
 ENV PG_MAJOR=15
 
 
-FROM base-image as basic-deps
+FROM base-image AS basic-deps
 
 RUN apt-get update && \
 	apt-get install -y --no-install-recommends \
@@ -19,7 +19,7 @@ RUN apt-get update && \
 	postgresql-server-dev-$PG_MAJOR
 
 
-FROM basic-deps as mssqlodbc-deps
+FROM basic-deps AS mssqlodbc-deps
 
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
     curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
@@ -27,7 +27,7 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
     ACCEPT_EULA=Y apt-get install -y msodbcsql17 msodbcsql18 mssql-tools mssql-tools18 unixodbc-dev
 
 
-FROM basic-deps as build-oracle_fdw
+FROM basic-deps AS build-oracle_fdw
 
 # Latest version
 ARG ORACLE_CLIENT_URL=https://download.oracle.com/otn_software/linux/instantclient/instantclient-basic-linuxx64.zip
@@ -56,7 +56,7 @@ RUN ASSET_NAME=$(basename $(curl -LIs -o /dev/null -w %{url_effective} https://g
 	make install
 
 
-FROM base-image as final-stage
+FROM base-image AS final-stage
 
 # libaio1 is a runtime requirement for the Oracle client that oracle_fdw uses
 # libsqlite3-mod-spatialite is a runtime requirement for using spatialite with sqlite_fdw
