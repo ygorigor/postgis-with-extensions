@@ -7,29 +7,13 @@ ENV PATH $PATH:${ORACLE_HOME}
 
 
 
-
-FROM base-image as basic-deps
+FROM base-image as common-deps
 
 RUN apt-get update && \
 	apt-get install -y --no-install-recommends \
 		ca-certificates \
-		curl
-
-
-FROM basic-deps as powa-scripts
-
-WORKDIR /tmp/powa
-RUN curl -LOJ "https://raw.githubusercontent.com/powa-team/powa-docker/master/powa-archivist/$PG_MAJOR/setup_powa-archivist.sh" && \
-	curl -LOJ "https://raw.githubusercontent.com/powa-team/powa-docker/master/powa-archivist/$PG_MAJOR/install_all_powa_ext.sql"
-
-
-
-
-FROM basic-deps as common-deps
-
-# /var/lib/apt/lists/ still has the indexes from parent stage, so there's no need to run apt-get update again.
+        curl \
 # (unless the parent stage cache is not invalidated...)
-RUN apt-get install -y --no-install-recommends \
 	gcc \
 	make \
 	postgresql-server-dev-$PG_MAJOR
