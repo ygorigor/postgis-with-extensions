@@ -135,22 +135,8 @@ RUN apt-get update && \
 		# postgresql-$PG_MAJOR-wal2json \
 		postgresql-plperl-$PG_MAJOR \
 		postgresql-plpython3-$PG_MAJOR \
-	# extensions below are all here for PoWA
-		postgresql-$PG_MAJOR-hypopg \
-		postgresql-$PG_MAJOR-pg-qualstats \
-		postgresql-$PG_MAJOR-pg-stat-kcache \
-		postgresql-$PG_MAJOR-pg-track-settings \
-		postgresql-$PG_MAJOR-pg-wait-sampling \
-		postgresql-$PG_MAJOR-powa && \
 	apt-get purge -y --auto-remove && \
 	rm -rf /var/lib/apt/lists/*
-
-COPY --from=powa-scripts \
-	/tmp/powa/setup_powa-archivist.sh \
-	/docker-entrypoint-initdb.d/setup_powa-archivist.sh
-COPY --from=powa-scripts \
-	/tmp/powa/install_all_powa_ext.sql \
-	/usr/local/src/install_all_powa_ext.sql
 
 COPY --from=build-sqlite_fdw \
 	/usr/share/postgresql/$PG_MAJOR/extension/sqlite_fdw* \
