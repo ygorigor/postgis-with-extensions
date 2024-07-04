@@ -1,13 +1,13 @@
-ARG BASE_IMAGE_TAG=latest
+ARG BASE_IMAGE_TAG=15-3.4
 
 FROM postgis/postgis:$BASE_IMAGE_TAG as base-image
 
-ENV ORACLE_HOME /usr/lib/oracle/client
-ENV PATH $PATH:${ORACLE_HOME}
+ENV ORACLE_HOME=/usr/lib/oracle/client
+ENV PATH=$PATH:${ORACLE_HOME}
+ENV PG_MAJOR=15
 
 
-
-FROM base-image as common-deps
+FROM base-image as basic-deps
 
 RUN apt-get update && \
 	apt-get install -y --no-install-recommends \
@@ -19,26 +19,15 @@ RUN apt-get update && \
 	postgresql-server-dev-$PG_MAJOR
 
 
-
-
 FROM basic-deps as mssqlodbc-deps
+
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
     curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
     apt-get update && \
     ACCEPT_EULA=Y apt-get install -y msodbcsql17 msodbcsql18 mssql-tools mssql-tools18 unixodbc-dev
-FROM common-deps as build-sqlite_fdw
-
-WORKDIR /tmp/sqlite_fdw
-RUN apt-get install -y --no-install-recommends libsqlite3-dev && \
-	ASSET_NAME=$(basename $(curl -LIs -o /dev/null -w %{url_effective} https://github.com/pgspider/sqlite_fdw/releases/latest)) && \
-	curl -L "https://github.com/pgspider/sqlite_fdw/archive/${ASSET_NAME}.tar.gz" | tar -zx --strip-components=1 -C . && \
-	make USE_PGXS=1 && \
-	make USE_PGXS=1 install
 
 
-
-
-FROM common-deps as build-oracle_fdw
+FROM basic-deps as build-oracle_fdw
 
 # Latest version
 ARG ORACLE_CLIENT_URL=https://download.oracle.com/otn_software/linux/instantclient/instantclient-basic-linuxx64.zip
@@ -65,8 +54,6 @@ RUN ASSET_NAME=$(basename $(curl -LIs -o /dev/null -w %{url_effective} https://g
 	curl -L "https://github.com/laurenz/oracle_fdw/archive/${ASSET_NAME}.tar.gz" | tar -zx --strip-components=1 -C . && \
 	make && \
 	make install
-
-
 
 
 FROM base-image as final-stage
@@ -133,22 +120,9 @@ RUN apt-get update && \
 		postgresql-$PG_MAJOR-unit \
 		# postgresql-$PG_MAJOR-wal2json \
 		postgresql-plperl-$PG_MAJOR \
-		postgresql-plpython3-$PG_MAJOR \
+		postgresql-plpython3-$PG_MAJOR && \
 	apt-get purge -y --auto-remove && \
 	rm -rf /var/lib/apt/lists/*
-
-COPY --from=build-sqlite_fdw \
-	/usr/share/postgresql/$PG_MAJOR/extension/sqlite_fdw* \
-	/usr/share/postgresql/$PG_MAJOR/extension/
-COPY --from=build-sqlite_fdw \
-	/usr/lib/postgresql/$PG_MAJOR/lib/bitcode/sqlite_fdw.index.bc \
-	/usr/lib/postgresql/$PG_MAJOR/lib/bitcode/sqlite_fdw.index.bc
-COPY --from=build-sqlite_fdw \
-	/usr/lib/postgresql/$PG_MAJOR/lib/bitcode/sqlite_fdw \
-	/usr/lib/postgresql/$PG_MAJOR/lib/bitcode/sqlite_fdw
-COPY --from=build-sqlite_fdw \
-	/usr/lib/postgresql/$PG_MAJOR/lib/sqlite_fdw.so \
-	/usr/lib/postgresql/$PG_MAJOR/lib/sqlite_fdw.so
 
 COPY --from=mssqlodbc-deps \
 	/opt/microsoft/ \
