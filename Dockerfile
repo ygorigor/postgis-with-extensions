@@ -40,13 +40,10 @@ RUN apt-get install -y --no-install-recommends \
 
 
 FROM basic-deps as mssqlodbc-deps
-
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
     curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
     apt-get update && \
     ACCEPT_EULA=Y apt-get install -y msodbcsql17 msodbcsql18 mssql-tools mssql-tools18 unixodbc-dev
-
-
 FROM common-deps as build-sqlite_fdw
 
 WORKDIR /tmp/sqlite_fdw
