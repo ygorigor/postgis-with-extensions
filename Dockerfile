@@ -1,10 +1,10 @@
-ARG BASE_IMAGE_TAG=15-3.4
+ARG BASE_IMAGE_TAG=16-3.4
 
 FROM postgis/postgis:$BASE_IMAGE_TAG AS base-image
 
 ENV ORACLE_HOME=/usr/lib/oracle/client
 ENV PATH=$PATH:${ORACLE_HOME}
-ENV PG_MAJOR=15
+ENV PG_MAJOR=16
 
 
 FROM base-image AS basic-deps
@@ -73,6 +73,7 @@ RUN apt-get update && \
 		postgresql-$PG_MAJOR-extra-window-functions \
 		postgresql-$PG_MAJOR-first-last-agg \
 		postgresql-$PG_MAJOR-hll \
+		postgresql-$PG_MAJOR-hypopg \
 		postgresql-$PG_MAJOR-icu-ext \
 		postgresql-$PG_MAJOR-ip4r \
 		postgresql-$PG_MAJOR-jsquery \
